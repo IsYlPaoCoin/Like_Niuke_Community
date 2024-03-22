@@ -22,7 +22,7 @@ public class LoggerTests {
     private static  final Logger logger= LoggerFactory.getLogger(LoggerTests.class);
 
     @Test
-    public void testLogger(){
+    public void testLogger() {
         System.out.println(logger.getName());
         //com.nowcoder.community.community.LoggerTests
 
@@ -35,4 +35,6 @@ public class LoggerTests {
         logger.warn("warn log");
         logger.error("error log");
     }
+
+//    测试git提交
 }
