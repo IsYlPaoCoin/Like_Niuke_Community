@@ -25,12 +25,12 @@ public interface CommunityConstant {
     int ACTIVATION_FAILURE = 2;
 
     /**
-     * 默认状态的登录凭证的超时时间
+     * 默认状态的登录凭证的超时时间 (1d)
      */
     int DEFAULT_EXPIRED_SECONDS = 3600 * 12;
 
     /**
-     * 记住状态的登录凭证超时时间
+     * 记住状态的登录凭证超时时间 （100d）
      */
     int REMEMBER_EXPIRED_SECONDS = 3600 * 24 * 100;
 

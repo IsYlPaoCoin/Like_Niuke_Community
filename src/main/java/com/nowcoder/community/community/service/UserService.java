@@ -1,7 +1,9 @@
 package com.nowcoder.community.community.service;
 
 
+import com.nowcoder.community.community.dao.LoginTicketMapper;
 import com.nowcoder.community.community.dao.UserMapper;
+import com.nowcoder.community.community.entity.LoginTicket;
 import com.nowcoder.community.community.entity.User;
 import com.nowcoder.community.community.util.CommunityConstant;
 import com.nowcoder.community.community.util.CommunityUtil;
@@ -31,8 +33,8 @@ public class UserService implements CommunityConstant {
 //    @Autowired
 //    private RedisTemplate redisTemplate;
 
-//    @Autowired
-////    private LoginTicketMapper loginTicketMapper;
+    @Autowired
+    private LoginTicketMapper loginTicketMapper;
 
     @Value("${community.path.domain}")
     private String domain;
@@ -136,78 +138,81 @@ public class UserService implements CommunityConstant {
         }
     }
 
-//    public Map<String, Object> login(String username, String password, int expiredSeconds) {
-//        Map<String, Object> map = new HashMap<>();
-//
-//        // 空值处理
-//        if (StringUtils.isBlank(username)) {
-//            map.put("usernameMsg", "账号不能为空!");
-//            return map;
-//        }
-//        if (StringUtils.isBlank(password)) {
-//            map.put("passwordMsg", "密码不能为空!");
-//            return map;
-//        }
-//
-//        // 验证账号
-//        User user = userMapper.selectByName(username);
-//        if (user == null) {
-//            map.put("usernameMsg", "该账号不存在!");
-//            return map;
-//        }
-//
-//        // 验证状态
-//        if (user.getStatus() == 0) {
-//            map.put("usernameMsg", "该账号未激活!");
-//            return map;
-//        }
-//
-//        // 验证密码
-//        password = CommunityUtil.md5(password + user.getSalt());
-//        if (!user.getPassword().equals(password)) {
-//            map.put("passwordMsg", "密码不正确!");
-//            return map;
-//        }
-//
-//        // 生成登录凭证
-//        LoginTicket loginTicket = new LoginTicket();
-//        loginTicket.setUserId(user.getId());
-//        loginTicket.setTicket(CommunityUtil.generateUUID());
-//        loginTicket.setStatus(0);
-//        loginTicket.setExpired(new Date(System.currentTimeMillis() + expiredSeconds * 1000));
-//
-//        //已使用redis替代loginTicketMapper
-////        loginTicketMapper.insertLoginTicket(loginTicket);
-//
+    // 返回结果可能会有 多种  ，所以将其设置为 map
+    public Map<String, Object> login(String username, String password, int expiredSeconds) {
+        Map<String, Object> map = new HashMap<>();
+
+        // 空值处理
+        if (StringUtils.isBlank(username)) {
+            map.put("usernameMsg", "账号不能为空!");
+            return map;
+        }
+        if (StringUtils.isBlank(password)) {
+            map.put("passwordMsg", "密码不能为空!");
+            return map;
+        }
+
+        // 验证账号
+        User user = userMapper.selectByName(username);
+        if (user == null) {
+            map.put("usernameMsg", "该账号不存在!");
+            return map;
+        }
+
+        // 验证状态
+        if (user.getStatus() == 0) {
+            map.put("usernameMsg", "该账号未激活!");
+            return map;
+        }
+
+        // 验证密码
+        password = CommunityUtil.md5(password + user.getSalt());
+        if (!user.getPassword().equals(password)) {
+            map.put("passwordMsg", "密码不正确!");
+            return map;
+        }
+
+        // 生成登录凭证
+        LoginTicket loginTicket = new LoginTicket();
+        loginTicket.setUserId(user.getId());
+        loginTicket.setTicket(CommunityUtil.generateUUID());
+        loginTicket.setStatus(0);
+        loginTicket.setExpired(new Date(System.currentTimeMillis() + expiredSeconds * 1000));
+
+        //已使用redis替代loginTicketMapper
+        loginTicketMapper.insertLoginTicket(loginTicket);
+
 //        String ticketKey = RedisKeyUtil.getTicketKey(loginTicket.getTicket());
 //        redisTemplate.opsForValue().set(ticketKey, loginTicket);
 //
-//        map.put("ticket", loginTicket.getTicket());
-//        return map;
-//    }
+        map.put("ticket", loginTicket.getTicket());
 
-//    public void logout(String ticket) {
-////        loginTicketMapper.updateStatus(ticket, 1);
-//        //使用redis，更改ticket状态。不使用删除，为了后期进行登录相关的统计
+        return map;
+    }
+
+    public void logout(String ticket) {
+        loginTicketMapper.updateStatus(ticket, 1);
+        //使用redis，更改ticket状态。不使用删除，为了后期进行登录相关的统计
 //        String ticketKey = RedisKeyUtil.getTicketKey(ticket);
 //        LoginTicket loginTicket = (LoginTicket) redisTemplate.opsForValue().get(ticketKey);
 //        loginTicket.setStatus(1);
 //        redisTemplate.opsForValue().set(ticketKey, loginTicket);
-//    }
+    }
 
-//    public LoginTicket findLoginTicket(String ticket) {
+    // 查询 凭证
+    public LoginTicket findLoginTicket(String ticket) {
 //        String ticketKey = RedisKeyUtil.getTicketKey(ticket);
-////        return loginTicketMapper.selectByTicket(ticket);
+        return loginTicketMapper.selectByTicket(ticket);
 //        return (LoginTicket) redisTemplate.opsForValue().get(ticketKey);
-//    }
+    }
 
-//    public int updateHeader(int id, String headerUrl) {
-//        //先去更新，再去清理缓存。可以避免更新数据库失败，缓存消失的现象。现在：数据库更新失败，缓存不会清除
+    public int updateHeader(int id, String headerUrl) {
+        //先去更新，再去清理缓存。可以避免更新数据库失败，缓存消失的现象。现在：数据库更新失败，缓存不会清除
 //        int rows = userMapper.updateHeader(id, headerUrl);
 //        clearCache(id);
 //        return rows;
-////        return userMapper.updateHeader(id, headerUrl);
-//    }
+        return userMapper.updateHeader(id, headerUrl);
+    }
 
 //    public User findUserByName(String username) {
 //        return userMapper.selectByName(username);

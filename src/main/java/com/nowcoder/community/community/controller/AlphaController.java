@@ -1,14 +1,17 @@
 package com.nowcoder.community.community.controller;
 
 import com.nowcoder.community.community.service.AlphaService;
+import com.nowcoder.community.community.util.CommunityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.SocketTimeoutException;
@@ -172,5 +175,62 @@ public class AlphaController {
 
 
         return list;
+    }
+
+    //01-- cookie 示例
+    //http://127.0.0.1:8080/community/alpha/cookie/set
+    @RequestMapping(path = "/cookie/set",method = RequestMethod.GET)
+    @ResponseBody
+    public String setCookie(HttpServletResponse response){
+        //01.创建 cookie
+        // 每一个cookie  只能存一组  字符串
+        Cookie cookie = new Cookie("code", CommunityUtil.generateUUID());
+        //02.设置cookie 生效范围
+        // 告诉浏览器   指定哪些路径  才会发送 cookie
+        cookie.setPath("/community/alpha");
+        // 设置cookie 的有效时间
+        // cookie默认  存到浏览器的内存里边  关闭  即消失
+        // 一旦设置了生存时间  她会存到硬盘里边   长期有效   直到超过这个时间  才会无效
+        cookie.setMaxAge(60 * 10);
+        // 发送cookie
+        response.addCookie(cookie);
+
+        // 浏览器 response-Header
+        //Set-Cookie:
+        //code=4fbda04b85bd413cbdcaabd18ec81442; Max-Age=600; Expires=Mon, 25-Mar-2024 12:01:00 GMT; Path=/community/alpha
+
+        return "set cookie";
+    }
+
+    //http://127.0.0.1:8080/community/alpha/cookie/get
+    @RequestMapping(path = "/cookie/get", method = RequestMethod.GET)
+    @ResponseBody
+    // 获取 Cookie 中（key）的 code
+    public String getCookie(@CookieValue("code") String code) {
+
+        System.out.println(code);
+        return "get cookie";
+    }
+
+
+    //02--session示例
+    //http://127.0.0.1:8080/community/alpha/session/set
+    @RequestMapping(path = "/session/set",method = RequestMethod.GET)
+    @ResponseBody
+    //由于 session 一直存放在服务端 , 所以里面存放什么数据都可以  《-》cookie中只能存 响应数据
+    public String setSession(HttpSession session){
+        session.setAttribute("id",1);
+        session.setAttribute("name","test");
+        return "set session";
+    }
+    @RequestMapping(path = "/session/get",method = RequestMethod.GET)
+    @ResponseBody
+    //由于 session 一直存放在服务端 , 所以里面存放什么数据都可以  《-》cookie中只能存 响应数据
+    public String getSession(HttpSession session){
+        System.out.println(session.getAttribute("id"));
+        //1
+        System.out.println(session.getAttribute("name"));
+        //test
+        return "get session";
     }
 }
