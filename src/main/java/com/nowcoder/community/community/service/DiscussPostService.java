@@ -3,6 +3,7 @@ package com.nowcoder.community.community.service;
 
 import com.nowcoder.community.community.dao.DiscussPostMapper;
 import com.nowcoder.community.community.entity.DiscussPost;
+import com.nowcoder.community.community.util.SensitiveFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,9 @@ public class DiscussPostService {
     @Autowired
     private DiscussPostMapper discussPostMapper;
 
-//    @Autowired
-//    private SensitiveFilter sensitiveFilter;
+    // 过滤 敏感词
+    @Autowired
+    private SensitiveFilter sensitiveFilter;
 
 //    @Value("${caffeine.posts.max-size}")
 //    private int maxSize;
@@ -102,20 +104,21 @@ public class DiscussPostService {
         return discussPostMapper.selectDiscussPostRows(userId);
     }
 
-//    public int addDiscussPost(DiscussPost post) {
-//        if (post == null) {
-//            throw new IllegalArgumentException("参数不能为空!");
-//        }
-//
-//        // 转义HTML标记
-//        post.setTitle(HtmlUtils.htmlEscape(post.getTitle()));
-//        post.setContent(HtmlUtils.htmlEscape(post.getContent()));
-//        // 过滤敏感词
-//        post.setTitle(sensitiveFilter.filter(post.getTitle()));
-//        post.setContent(sensitiveFilter.filter(post.getContent()));
-//
-//        return discussPostMapper.insertDiscussPost(post);
-//    }
+    public int addDicusspost(DiscussPost post) {
+        if(post == null) {
+            throw new IllegalArgumentException("参数不能为空");
+        }
+
+        // 转义 HTML 标记
+        post.setTitle(HtmlUtils.htmlEscape(post.getTitle()));
+        post.setContent(HtmlUtils.htmlEscape(post.getContent()));
+
+        // 过滤 敏感词
+        post.setTitle(sensitiveFilter.filter(post.getTitle()));
+        post.setContent(sensitiveFilter.filter(post.getContent()));
+
+        return discussPostMapper.insertDiscussPost(post);
+    }
 
     public DiscussPost findDiscussPostById(int id) {
         return discussPostMapper.selectDiscussPostById(id);

@@ -1,6 +1,7 @@
 package com.nowcoder.community.community.util;
 
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.DigestUtils;
 
@@ -28,31 +29,35 @@ public class CommunityUtil {
         return DigestUtils.md5DigestAsHex(key.getBytes());
     }
 
-//    public static String getJSONString(int code, String msg, Map<String, Object> map) {
-//        JSONObject json = new JSONObject();
-//        json.put("code", code);
-//        json.put("msg", msg);
-//        if (map != null) {
-//            for (String key : map.keySet()) {
-//                json.put(key, map.get(key));
-//            }
-//        }
-//        return json.toJSONString();
-//    }
-//
-//    public static String getJSONString(int code, String msg) {
-//        return getJSONString(code, msg, null);
-//    }
-//
-//    public static String getJSONString(int code) {
-//        return getJSONString(code, null, null);
-//    }
-//
-//    public static void main(String[] args) {
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("name", "zhangsan");
-//        map.put("age", 25);
-//        System.out.println(getJSONString(0, "ok", map));
-//    }
+    // 调用者把这  三种数据给我  我把他封装对象   再把对象转换成json格式的字符串
+    public static String getJSONString(int code, String msg,Map<String,Object> map){
+        JSONObject json = new JSONObject();
+        json.put("code", code);
+        json.put("msg", msg);
+        if(map != null){
+            // =》可以遍历map的key
+            // 可以遍历map的value
+            // 也可以遍历map的key-value
+            for (String key: map.keySet()) {
+                json.put(key, map.get(key));
+            }
+        }
+        return json.toJSONString();
+    }
 
+    public static String getJSONString(int code,String msg){
+        return getJSONString(code,msg,null);
+    }
+
+    public static String getJSONString(int code){
+        return getJSONString(code,null,null);
+    }
+
+    public static void main(String[] args) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name","zhangsan");
+        map.put("age",25);
+        System.out.println(getJSONString(0,"ok",map));
+        //{"msg":"ok","code":200,"name":"zhangsan","age":25}
+    }
 }

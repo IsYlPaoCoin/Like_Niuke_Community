@@ -1,4 +1,4 @@
-package com.nowcoder.community.community.interceptor;
+package com.nowcoder.community.community.controller.interceptor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

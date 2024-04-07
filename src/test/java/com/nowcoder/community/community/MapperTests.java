@@ -2,9 +2,11 @@ package com.nowcoder.community.community;
 
 import com.nowcoder.community.community.dao.DiscussPostMapper;
 import com.nowcoder.community.community.dao.LoginTicketMapper;
+import com.nowcoder.community.community.dao.MessageMapper;
 import com.nowcoder.community.community.dao.UserMapper;
 import com.nowcoder.community.community.entity.DiscussPost;
 import com.nowcoder.community.community.entity.LoginTicket;
+import com.nowcoder.community.community.entity.Message;
 import com.nowcoder.community.community.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,8 +32,8 @@ public class MapperTests {
     @Autowired
     private LoginTicketMapper loginTicketMapper;
 
-//    @Autowired
-//    private MessageMapper messageMapper;
+    @Autowired
+    private MessageMapper messageMapper;
 
     @Test
     public void testSelectUser() {
@@ -108,27 +110,31 @@ public class MapperTests {
         System.out.println(loginTicket);
         //LoginTicket{id=1, userId=101, ticket='abc', status=1, expired=Wed Mar 27 19:20:36 CST 2024}
     }
-//
-//    @Test
-//    public void testSelectLetters() {
-//        List<Message> list = messageMapper.selectConversations(111, 0, 20);
-//        for (Message message : list) {
-//            System.out.println(message);
-//        }
-//
-//        int count = messageMapper.selectConversationCount(111);
-//        System.out.println(count);
-//
-//        list = messageMapper.selectLetters("111_112", 0, 10);
-//        for (Message message : list) {
-//            System.out.println(message);
-//        }
-//
-//        count = messageMapper.selectLetterCount("111_112");
-//        System.out.println(count);
-//
-//        count = messageMapper.selectLetterUnreadCount(131, "111_131");
-//        System.out.println(count);
-//
-//    }
+
+    @Test
+    public void testSelectLetters(){
+        // 查询 111用户 相关的私信
+        List<Message> list =messageMapper.selectConversations(111,0,20);
+        for(Message message:list){
+            System.out.println(message);
+        }
+        int count = messageMapper.selectConversationCount(111);
+        System.out.println(count);
+        //14
+
+        // 查询 111与112用户 （会话） 之间的相关私信
+        list = messageMapper.selectLetters("111_112",0,10);
+        for(Message message:list){
+            System.out.println(message);
+        }
+        count = messageMapper.selectLetterCount("111_112");
+        System.out.println(count);
+        //8
+
+        // 查询  用户111 与 131 会话中  的未读消息
+        count = messageMapper.selectLetterUnreadCount(131,"111_131");
+        System.out.println(count);
+        //2
+    }
+
 }

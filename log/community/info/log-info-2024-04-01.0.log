@@ -1,0 +1,32 @@
+2024-04-01 18:41:12,704 INFO [main] c.n.c.c.SensitiveTests [StartupInfoLogger.java:50] Starting SensitiveTests on LAPTOP-E3TEOQ52 with PID 27316 (started by 杨理 in C:\Desktop\软件开发\项目\niuke_coder\community)
+2024-04-01 18:41:12,722 INFO [main] c.n.c.c.SensitiveTests [SpringApplication.java:675] No active profile set, falling back to default profiles: default
+2024-04-01 18:41:15,807 INFO [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [PostProcessorRegistrationDelegate.java:330] Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$11a2b459] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2024-04-01 18:41:15,891 INFO [main] o.s.w.s.a.s.AnnotationActionEndpointMapping [AbstractAddressingEndpointMapping.java:236] Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2024-04-01 18:41:18,328 INFO [main] o.s.s.c.ThreadPoolTaskExecutor [ExecutorConfigurationSupport.java:171] Initializing ExecutorService 'applicationTaskExecutor'
+2024-04-01 18:41:18,800 INFO [main] o.s.b.a.w.s.WelcomePageHandlerMapping [WelcomePageHandlerMapping.java:61] Adding welcome page template: index
+2024-04-01 18:41:19,698 INFO [main] c.n.c.c.SensitiveTests [StartupInfoLogger.java:59] Started SensitiveTests in 8.096 seconds (JVM running for 10.626)
+2024-04-01 18:41:20,248 INFO [Thread-3] o.s.s.c.ThreadPoolTaskExecutor [ExecutorConfigurationSupport.java:208] Shutting down ExecutorService 'applicationTaskExecutor'
+2024-04-01 18:43:38,880 INFO [main] c.n.c.c.SensitiveTests [StartupInfoLogger.java:50] Starting SensitiveTests on LAPTOP-E3TEOQ52 with PID 27428 (started by 杨理 in C:\Desktop\软件开发\项目\niuke_coder\community)
+2024-04-01 18:43:38,884 INFO [main] c.n.c.c.SensitiveTests [SpringApplication.java:675] No active profile set, falling back to default profiles: default
+2024-04-01 18:43:41,607 INFO [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [PostProcessorRegistrationDelegate.java:330] Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$bef491fd] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2024-04-01 18:43:41,715 INFO [main] o.s.w.s.a.s.AnnotationActionEndpointMapping [AbstractAddressingEndpointMapping.java:236] Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2024-04-01 18:43:44,705 INFO [main] o.s.s.c.ThreadPoolTaskExecutor [ExecutorConfigurationSupport.java:171] Initializing ExecutorService 'applicationTaskExecutor'
+2024-04-01 18:43:45,211 INFO [main] o.s.b.a.w.s.WelcomePageHandlerMapping [WelcomePageHandlerMapping.java:61] Adding welcome page template: index
+2024-04-01 18:43:46,094 INFO [main] c.n.c.c.SensitiveTests [StartupInfoLogger.java:59] Started SensitiveTests in 8.117 seconds (JVM running for 10.189)
+2024-04-01 18:43:46,576 INFO [Thread-3] o.s.s.c.ThreadPoolTaskExecutor [ExecutorConfigurationSupport.java:208] Shutting down ExecutorService 'applicationTaskExecutor'
+2024-04-01 18:45:22,180 INFO [main] c.n.c.c.SensitiveTests [StartupInfoLogger.java:50] Starting SensitiveTests on LAPTOP-E3TEOQ52 with PID 3276 (started by 杨理 in C:\Desktop\软件开发\项目\niuke_coder\community)
+2024-04-01 18:45:22,184 INFO [main] c.n.c.c.SensitiveTests [SpringApplication.java:675] No active profile set, falling back to default profiles: default
+2024-04-01 18:45:24,840 INFO [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [PostProcessorRegistrationDelegate.java:330] Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$16412860] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2024-04-01 18:45:24,943 INFO [main] o.s.w.s.a.s.AnnotationActionEndpointMapping [AbstractAddressingEndpointMapping.java:236] Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2024-04-01 18:45:27,388 INFO [main] o.s.s.c.ThreadPoolTaskExecutor [ExecutorConfigurationSupport.java:171] Initializing ExecutorService 'applicationTaskExecutor'
+2024-04-01 18:45:27,822 INFO [main] o.s.b.a.w.s.WelcomePageHandlerMapping [WelcomePageHandlerMapping.java:61] Adding welcome page template: index
+2024-04-01 18:45:28,564 INFO [main] c.n.c.c.SensitiveTests [StartupInfoLogger.java:59] Started SensitiveTests in 7.266 seconds (JVM running for 9.25)
+2024-04-01 18:45:29,003 INFO [Thread-3] o.s.s.c.ThreadPoolTaskExecutor [ExecutorConfigurationSupport.java:208] Shutting down ExecutorService 'applicationTaskExecutor'
+2024-04-01 18:50:15,425 INFO [main] c.n.c.c.SensitiveTests [StartupInfoLogger.java:50] Starting SensitiveTests on LAPTOP-E3TEOQ52 with PID 27912 (started by 杨理 in C:\Desktop\软件开发\项目\niuke_coder\community)
+2024-04-01 18:50:15,428 INFO [main] c.n.c.c.SensitiveTests [SpringApplication.java:675] No active profile set, falling back to default profiles: default
+2024-04-01 18:50:17,958 INFO [main] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker [PostProcessorRegistrationDelegate.java:330] Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$e914cb2d] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2024-04-01 18:50:18,043 INFO [main] o.s.w.s.a.s.AnnotationActionEndpointMapping [AbstractAddressingEndpointMapping.java:236] Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2024-04-01 18:50:20,688 INFO [main] o.s.s.c.ThreadPoolTaskExecutor [ExecutorConfigurationSupport.java:171] Initializing ExecutorService 'applicationTaskExecutor'
+2024-04-01 18:50:21,096 INFO [main] o.s.b.a.w.s.WelcomePageHandlerMapping [WelcomePageHandlerMapping.java:61] Adding welcome page template: index
+2024-04-01 18:50:22,088 INFO [main] c.n.c.c.SensitiveTests [StartupInfoLogger.java:59] Started SensitiveTests in 7.482 seconds (JVM running for 9.379)
+2024-04-01 18:50:22,516 INFO [Thread-3] o.s.s.c.ThreadPoolTaskExecutor [ExecutorConfigurationSupport.java:208] Shutting down ExecutorService 'applicationTaskExecutor'

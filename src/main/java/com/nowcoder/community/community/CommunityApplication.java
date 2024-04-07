@@ -11,7 +11,5 @@ public class CommunityApplication {
         //1.启动tomcat
         //2.自动创建了Spring容器   == 》     创建以后会自动的扫描   某些包(配置类所在包 以及其子包)下的Bean  装配到容器中
         SpringApplication.run(CommunityApplication.class, args);
-
     }
-
 }

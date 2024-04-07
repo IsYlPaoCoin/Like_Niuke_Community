@@ -1,5 +1,6 @@
 package com.nowcoder.community.community.controller;
 
+import com.nowcoder.community.community.annotation.LoginRequired;
 import com.nowcoder.community.community.entity.User;
 import com.nowcoder.community.community.service.UserService;
 import com.nowcoder.community.community.util.CommunityUtil;
@@ -57,11 +58,13 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
+    @LoginRequired
     @RequestMapping(path = "/setting",method = RequestMethod.GET)
     public String getSettingPage() {
         return "/site/setting";
     }
 
+    @LoginRequired
     @RequestMapping(path = "/upload", method = RequestMethod.POST)
     // 声明model 携带数据
     public String uploadHeader(MultipartFile headerImage, Model model){ //headerimage: StandardMultipartHttpServletReequest$StandardMultipartFile@7720    model: size =0

@@ -20,7 +20,7 @@ public interface DiscussPostMapper {
     int insertDiscussPost(DiscussPost discussPost);
 
     DiscussPost selectDiscussPostById(int id);
-
+    // 更新帖子 数量 方法
     int updateCommentCount(int id, int commentCount);
 
     int updateType(int id, int type);

@@ -233,4 +233,17 @@ public class AlphaController {
         //test
         return "get session";
     }
+
+    // ajax 示例
+    @RequestMapping(path = "/ajax",method = RequestMethod.POST)
+    // 异步请求 不刷新网页  向浏览器 发送json字符串
+    @ResponseBody
+    public String testAjax(String name,int age){
+        System.out.println(name);
+        System.out.println(age);
+        return CommunityUtil.getJSONString(0,"操作成功");
+    }
+
+
+
 }

@@ -1,4 +1,4 @@
-package com.nowcoder.community.community.interceptor;
+package com.nowcoder.community.community.controller.interceptor;
 
 import com.nowcoder.community.community.entity.LoginTicket;
 import com.nowcoder.community.community.entity.User;

@@ -214,9 +214,9 @@ public class UserService implements CommunityConstant {
         return userMapper.updateHeader(id, headerUrl);
     }
 
-//    public User findUserByName(String username) {
-//        return userMapper.selectByName(username);
-//    }
+    public User findUserByName(String username) {
+        return userMapper.selectByName(username);
+    }
 
     //1.优先从缓存中取值
 //    public User getCache(int userId) {
