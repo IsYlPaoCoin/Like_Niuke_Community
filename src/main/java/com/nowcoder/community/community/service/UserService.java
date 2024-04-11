@@ -8,9 +8,11 @@ import com.nowcoder.community.community.entity.User;
 import com.nowcoder.community.community.util.CommunityConstant;
 import com.nowcoder.community.community.util.CommunityUtil;
 import com.nowcoder.community.community.util.MailClient;
+import com.nowcoder.community.community.util.RedisKeyUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -29,12 +31,12 @@ public class UserService implements CommunityConstant {
 
     @Autowired
     private TemplateEngine templateEngine;
-//
-//    @Autowired
-//    private RedisTemplate redisTemplate;
 
     @Autowired
-    private LoginTicketMapper loginTicketMapper;
+    private RedisTemplate redisTemplate;
+
+//    @Autowired
+//    private LoginTicketMapper loginTicketMapper;
 
     @Value("${community.path.domain}")
     private String domain;
@@ -43,12 +45,12 @@ public class UserService implements CommunityConstant {
     private String contextPath;
 
     public User findUserById(int id) {
-        return userMapper.selectById(id);
-//        User user = getCache(id);
-//        if (user == null) {
-//            user = initCache(id);
-//        }
-//        return user;
+//        return userMapper.selectById(id);
+        User user = getCache(id);
+        if (user == null) {
+            user = initCache(id);
+        }
+        return user;
     }
 
     public Map<String, Object> register(User user) {
@@ -131,7 +133,7 @@ public class UserService implements CommunityConstant {
             return ACTIVATION_REPEAT;
         } else if (user.getActivationCode().equals(code)) {
             userMapper.updateStatus(userId, 1);//更改状态，变为已激活
-//            clearCache(userId);
+            clearCache(userId);
             return ACTIVATION_SUCCESS;
         } else {
             return ACTIVATION_FAILURE;
@@ -180,64 +182,69 @@ public class UserService implements CommunityConstant {
         loginTicket.setExpired(new Date(System.currentTimeMillis() + expiredSeconds * 1000));
 
         //已使用redis替代loginTicketMapper
-        loginTicketMapper.insertLoginTicket(loginTicket);
+//        loginTicketMapper.insertLoginTicket(loginTicket);
 
-//        String ticketKey = RedisKeyUtil.getTicketKey(loginTicket.getTicket());
-//        redisTemplate.opsForValue().set(ticketKey, loginTicket);
-//
+        String redisKey = RedisKeyUtil.getTicketKey(loginTicket.getTicket());
+        redisTemplate.opsForValue().set(redisKey, loginTicket);
+
         map.put("ticket", loginTicket.getTicket());
 
         return map;
     }
 
     public void logout(String ticket) {
-        loginTicketMapper.updateStatus(ticket, 1);
-        //使用redis，更改ticket状态。不使用删除，为了后期进行登录相关的统计
-//        String ticketKey = RedisKeyUtil.getTicketKey(ticket);
-//        LoginTicket loginTicket = (LoginTicket) redisTemplate.opsForValue().get(ticketKey);
-//        loginTicket.setStatus(1);
-//        redisTemplate.opsForValue().set(ticketKey, loginTicket);
+//        loginTicketMapper.updateStatus(ticket, 1);
+//        使用redis，更改ticket状态。不使用删除，为了后期进行登录相关的统计
+        String redisKey = RedisKeyUtil.getTicketKey(ticket);
+        LoginTicket loginTicket = (LoginTicket) redisTemplate.opsForValue().get(redisKey);
+        loginTicket.setStatus(1);
+        redisTemplate.opsForValue().set(redisKey, loginTicket);
     }
 
     // 查询 凭证
     public LoginTicket findLoginTicket(String ticket) {
-//        String ticketKey = RedisKeyUtil.getTicketKey(ticket);
-        return loginTicketMapper.selectByTicket(ticket);
-//        return (LoginTicket) redisTemplate.opsForValue().get(ticketKey);
+        String redisKey = RedisKeyUtil.getTicketKey(ticket);
+//        return loginTicketMapper.selectByTicket(ticket);
+        return (LoginTicket) redisTemplate.opsForValue().get(redisKey);
     }
 
     public int updateHeader(int id, String headerUrl) {
-        //先去更新，再去清理缓存。可以避免更新数据库失败，缓存消失的现象。现在：数据库更新失败，缓存不会清除
-//        int rows = userMapper.updateHeader(id, headerUrl);
-//        clearCache(id);
-//        return rows;
-        return userMapper.updateHeader(id, headerUrl);
+        //先去更新，再去清理缓存。
+        // 可以避免更新数据库失败，缓存消失的现象。
+        // 现在：数据库更新失败，缓存不会清除
+        int rows = userMapper.updateHeader(id, headerUrl);
+        clearCache(id);
+        return rows;
+//        return userMapper.updateHeader(id, headerUrl);
     }
 
     public User findUserByName(String username) {
         return userMapper.selectByName(username);
     }
 
-    //1.优先从缓存中取值
-//    public User getCache(int userId) {
-//        String userKey = RedisKeyUtil.getUserKey(userId);
-//        return (User) redisTemplate.opsForValue().get(userKey);
-//    }
+    // Redis 做缓存  需要注意的几件事
+
+    //1.优先尝试从缓存中取值
+    private User getCache(int userId) {
+        String userKey = RedisKeyUtil.getUserKey(userId);
+        // 返回值是Object 转换为User
+        return (User) redisTemplate.opsForValue().get(userKey);
+    }
 
     //2.缓存取不到，从数据库中查，再存入缓存(初始化缓存)
-//    public User initCache(int userId) {
-//        User user = userMapper.selectById(userId);
-//        String userKey = RedisKeyUtil.getUserKey(userId);
-//        //过期时间1h，3600s
-//        redisTemplate.opsForValue().set(userKey, user, 3600, TimeUnit.SECONDS);
-//        return user;
-//    }
+    public User initCache(int userId) {
+        User user = userMapper.selectById(userId);
+        String redisKey = RedisKeyUtil.getUserKey(userId);
+        //过期时间1h，3600s
+        redisTemplate.opsForValue().set(redisKey, user, 3600, TimeUnit.SECONDS);
+        return user;
+    }
 
     //3.更新用户信息，清除缓存数据
-//    public void clearCache(int userId) {
-//        String userKey = RedisKeyUtil.getUserKey(userId);
-//        redisTemplate.delete(userKey);
-//    }
+    public void clearCache(int userId) {
+        String redisKey = RedisKeyUtil.getUserKey(userId);
+        redisTemplate.delete(redisKey);
+    }
 
     /**
      * @Description: 根据用户类型，获得相应权限

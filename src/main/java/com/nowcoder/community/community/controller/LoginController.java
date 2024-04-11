@@ -4,11 +4,14 @@ import com.google.code.kaptcha.Producer;
 import com.nowcoder.community.community.entity.User;
 import com.nowcoder.community.community.service.UserService;
 import com.nowcoder.community.community.util.CommunityConstant;
+import com.nowcoder.community.community.util.CommunityUtil;
+import com.nowcoder.community.community.util.RedisKeyUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -24,6 +27,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author coolsen
@@ -43,8 +47,8 @@ public class LoginController implements CommunityConstant {
     @Autowired
     private Producer kaptchaProducer;
 
-//    @Autowired
-//    private RedisTemplate redisTemplate;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     // 注入value(声明有效路径)
     @Value("${server.servlet.context-path}")
@@ -94,25 +98,28 @@ public class LoginController implements CommunityConstant {
     //http://localhost:8080/community/kaptcha
     @RequestMapping(path = "/kaptcha", method = RequestMethod.GET)
     //图片需要手动输出，  所以用void
-    public void getKaptcha(HttpServletResponse response, HttpSession session) {
+    public void getKaptcha(HttpServletResponse response/*, HttpSession session*/) {
         // 生成验证码
         // 验证码必须存到服务器端   如果存到服务器端容易被盗取
         String text = kaptchaProducer.createText();
         BufferedImage image = kaptchaProducer.createImage(text);
 
         // v1.将验证码存入session,效率较低
-        session.setAttribute("kaptcha", text);
+//        session.setAttribute("kaptcha", text);
 
         // v2.将验证码存入redis，过期时间60s
-        //验证码的所属
-//        String kaptchaOwner = CommunityUtil.generateUUID();
-//        Cookie cookie = new Cookie("kaptchaOwner", kaptchaOwner);
-//        cookie.setMaxAge(60);
-//        cookie.setPath(contextPath);
-//        response.addCookie(cookie);
-//        //将验证码存入redis
-//        String kaptchaKey = RedisKeyUtil.getKaptchaKey(kaptchaOwner);
-//        redisTemplate.opsForValue().set(kaptchaKey, text, 60, TimeUnit.SECONDS);
+        //（1）验证码的所属
+        // 创建  临时给 客户端 颁发字符串
+        String kaptchaOwner = CommunityUtil.generateUUID();
+        // 使用cookie  保存  字符串
+        Cookie cookie = new Cookie("kaptchaOwner", kaptchaOwner);
+        cookie.setMaxAge(60);
+        cookie.setPath(contextPath);
+        response.addCookie(cookie);
+
+        //（2）将验证码存入redis
+        String redisKey = RedisKeyUtil.getKaptchaKey(kaptchaOwner);
+        redisTemplate.opsForValue().set(redisKey, text, 60, TimeUnit.SECONDS);
 
         // 将图片输出给浏览器
         response.setContentType("image/png");
@@ -126,16 +133,17 @@ public class LoginController implements CommunityConstant {
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public String login(String username, String password, String code, boolean rememberme,
-                        Model model, HttpSession session, HttpServletResponse response) {
+                        Model model,/* HttpSession session,*/ HttpServletResponse response,@CookieValue("kaptchaOwner") String kaptchaOwner) {
         // v1.从session中取值，检查验证码
-        String kaptcha = (String) session.getAttribute("kaptcha");
+//        String kaptcha = (String) session.getAttribute("kaptcha");
 
         // v2.从cookie中取出owner（键），去查redis中的值
-//        String kaptcha = null;
-//        if (StringUtils.isNotBlank(kaptchaOwner)) {
-//            String kaptchaKey = RedisKeyUtil.getKaptchaKey(kaptchaOwner);
-//            kaptcha = (String) redisTemplate.opsForValue().get(kaptchaKey);
-//        }
+        String kaptcha = null;
+        // (1) 如果key 不为空， 即数据没有失效的话
+        if (StringUtils.isNotBlank(kaptchaOwner)) {
+            String redisKey = RedisKeyUtil.getKaptchaKey(kaptchaOwner);
+            kaptcha = (String) redisTemplate.opsForValue().get(redisKey);
+        }
         // 如果取出的验证码为空 || 取出的 code 也为空 || ！kaptcha.equalsIgnoreCase(code)  比较session中的验证码 和 传入的验证码 是否相同
         if (StringUtils.isBlank(kaptcha) || StringUtils.isBlank(code) || !kaptcha.equalsIgnoreCase(code)) {
             model.addAttribute("codeMsg", "验证码不正确!");
