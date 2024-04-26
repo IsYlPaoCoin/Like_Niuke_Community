@@ -71,7 +71,9 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link position-relative" href="notice.html">系统通知<span class="badge badge-danger">27</span></a>
+							<a class="nav-link position-relative" th:href="@{/notice/list}">
+								系统通知<span class="badge badge-danger" th:text="${noticeUnreadCount}" th:if="${noticeUnreadCount!=0}">27</span>
+							</a>
 						</li>
 					</ul>
 					<button type="button" class="btn btn-primary btn-sm position-absolute rt-0" data-toggle="modal" data-target="#sendModal">发私信</button>
@@ -90,7 +92,7 @@
 								<form>
 									<div class="form-group">
 										<label for="recipient-name" class="col-form-label">发给：</label>
-										<input type="text" class="form-control" id="recipient-name" >
+										<input type="text" class="form-control" id="recipient-name">
 									</div>
 									<div class="form-group">
 										<label for="message-text" class="col-form-label">内容：</label>

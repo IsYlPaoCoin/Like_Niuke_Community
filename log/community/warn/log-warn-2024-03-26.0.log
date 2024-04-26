@@ -1,3 +1,0 @@
-2024-03-22 17:09:37,889 WARN [main] c.n.c.c.LoggerTests [LoggerTests.java:34] warn log
-2024-03-26 09:23:16,732 WARN [restartedMain] o.s.b.d.a.OptionalLiveReloadServer [OptionalLiveReloadServer.java:61] Unable to start LiveReload server
-2024-03-26 14:29:02,119 WARN [http-nio-8080-exec-1] o.s.w.s.m.s.DefaultHandlerExceptionResolver [AbstractHandlerExceptionResolver.java:198] Resolved [org.springframework.web.bind.MissingRequestCookieException: Missing cookie 'code' for method parameter of type String]

@@ -43,6 +43,10 @@ public class ServiceLogAspect {
         // 用户ip【x.x.x.x】在【2024-04-06】，访问了【com.nowcoder.community.community.service.* 方法】
         // 获取用户ip
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+
+        if(attributes == null) {
+            return;
+        }
         HttpServletRequest request = attributes.getRequest();
         String ip = request.getRemoteHost();
         // 获取指定格式  的日期
