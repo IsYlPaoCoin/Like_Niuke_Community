@@ -110,3 +110,4 @@ org.springframework.context.ApplicationContextException: Failed to start bean 'o
 	at java.lang.reflect.Method.invoke(Method.java:498)
 	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49)
 Caused by: org.apache.kafka.common.errors.TimeoutException: Timeout expired while fetching topic metadata
+2024-05-14 18:50:24,020 ERROR [restartedMain] o.s.d.e.r.s.AbstractElasticsearchRepository [AbstractElasticsearchRepository.java:91] failed to load elasticsearch nodes : org.elasticsearch.client.transport.NoNodeAvailableException: None of the configured nodes are available: [{#transport#-1}{QSg5X_trQvW18uV8khIlUw}{127.0.0.1}{127.0.0.1:9300}]
