@@ -67,7 +67,7 @@ public class DiscussPostController implements CommunityConstant {
 
         dicussPostService.addDicusspost(post);
 
-        // 触发发帖时间    将其存入 es 服务器
+        // 触发发帖时间    + 将其存入 es 服务器
         Event event = new Event()
                 .setTopic(TOPIC_PUBLISH)
                 .setUserId(user.getId())

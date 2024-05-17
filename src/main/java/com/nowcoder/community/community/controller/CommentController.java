@@ -78,5 +78,4 @@ public class CommentController implements CommunityConstant {
         }
         return "redirect:/discuss/detail/" + discussPostId;
     }
-
 }
